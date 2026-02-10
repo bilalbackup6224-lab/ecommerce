@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyShop - Product Details</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">MyShop</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="cart.html">Cart (<span id="cart-count">0</span>)</a>
+            <a href="login.html">Login</a>
+        </nav>
+    </header>
+
+    <section class="product-detail">
+        <div class="product-image">
+            <img src="images/product1.jpg" alt="Product 1">
+        </div>
+        <div class="product-info">
+            <h2>Product 1</h2>
+            <p>Price: $25</p>
+            <p>This is a high-quality product that you will love!</p>
+            <button onclick="addToCart('Product 1', 25)">Add to Cart</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 MyShop. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
