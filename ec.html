@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Fancy Shop</title>
+<title>Fancy Shop – Checkout</title>
+
 <style>
 * {
     box-sizing: border-box;
@@ -48,11 +49,6 @@ main {
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-
-.product:hover {
-    transform: translateY(-6px);
 }
 
 .product img {
@@ -60,16 +56,12 @@ main {
     border-radius: 10px;
 }
 
-.product h3 {
-    margin: 10px 0 5px;
-}
-
 .product button {
     width: 100%;
     padding: 10px;
-    border: none;
     background: #007bff;
     color: white;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
 }
@@ -79,23 +71,23 @@ main {
     padding: 20px;
     border-radius: 12px;
     flex: 1;
-    min-width: 260px;
+    min-width: 280px;
     box-shadow: 0 5px 12px rgba(0,0,0,0.1);
 }
 
 .cart-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .cart-item button {
     background: red;
-    color: white;
     border: none;
+    color: white;
     padding: 2px 6px;
-    cursor: pointer;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .checkout {
@@ -105,8 +97,52 @@ main {
     color: white;
     border: none;
     border-radius: 6px;
-    cursor: pointer;
     margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Checkout Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.place-order {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.close {
+    text-align: right;
+    cursor: pointer;
+    color: red;
 }
 </style>
 </head>
@@ -127,9 +163,30 @@ main {
         <h2>Your Cart</h2>
         <div id="cartItems"></div>
         <h3>Total: $<span id="total">0</span></h3>
-        <button class="checkout">Checkout</button>
+        <button class="checkout" onclick="openCheckout()">Checkout</button>
     </section>
 </main>
+
+<!-- Checkout Modal -->
+<div class="modal" id="checkoutModal">
+    <div class="modal-content">
+        <div class="close" onclick="closeCheckout()">✖</div>
+        <h2>Checkout</h2>
+
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="text" id="address" placeholder="Shipping Address">
+        <select id="payment">
+            <option value="">Payment Method</option>
+            <option>Credit Card</option>
+            <option>UPI</option>
+            <option>Cash on Delivery</option>
+        </select>
+
+        <p><strong>Order Total: $<span id="checkoutTotal">0</span></strong></p>
+
+        <button class="place-order" onclick="placeOrder()">Place Order</button>
+    </div>
+</div>
 
 <script>
 const products = [
@@ -145,6 +202,7 @@ const productsDiv = document.getElementById("products");
 const cartItemsDiv = document.getElementById("cartItems");
 const totalSpan = document.getElementById("total");
 const cartCount = document.getElementById("cartCount");
+const checkoutTotal = document.getElementById("checkoutTotal");
 
 function renderProducts() {
     productsDiv.innerHTML = "";
@@ -162,24 +220,19 @@ function renderProducts() {
 
 function addToCart(id) {
     const item = cart.find(i => i.id === id);
-    if (item) {
-        item.qty++;
-    } else {
-        const product = products.find(p => p.id === id);
-        cart.push({ ...product, qty: 1 });
-    }
+    if (item) item.qty++;
+    else cart.push({ ...products.find(p => p.id === id), qty: 1 });
     saveCart();
 }
 
 function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
+    cart = cart.filter(i => i.id !== id);
     saveCart();
 }
 
 function renderCart() {
     cartItemsDiv.innerHTML = "";
-    let total = 0;
-    let count = 0;
+    let total = 0, count = 0;
 
     cart.forEach(item => {
         total += item.price * item.qty;
@@ -187,20 +240,49 @@ function renderCart() {
         cartItemsDiv.innerHTML += `
             <div class="cart-item">
                 <span>${item.name} x${item.qty}</span>
-                <span>
-                    $${item.price * item.qty}
-                    <button onclick="removeFromCart(${item.id})">x</button>
-                </span>
+                <span>$${item.price * item.qty}
+                <button onclick="removeFromCart(${item.id})">x</button></span>
             </div>
         `;
     });
 
     totalSpan.innerText = total;
+    checkoutTotal.innerText = total;
     cartCount.innerText = count;
 }
 
 function saveCart() {
     localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function openCheckout() {
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
+    document.getElementById("checkoutModal").style.display = "flex";
+}
+
+function closeCheckout() {
+    document.getElementById("checkoutModal").style.display = "none";
+}
+
+function placeOrder() {
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const payment = document.getElementById("payment").value;
+
+    if (!name || !address || !payment) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    alert("🎉 Order placed successfully!");
+
+    cart = [];
+    localStorage.removeItem("cart");
+    closeCheckout();
     renderCart();
 }
 
@@ -210,4 +292,3 @@ renderCart();
 
 </body>
 </html>
-
