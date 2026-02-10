@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Fancy Shop</title>
+<title>ecommerce store</title>
 
 <style>
 * {
@@ -188,31 +188,31 @@ main {
 </div>
 
 <script>
+/* ✅ PRODUCT IMAGES MATCH PRODUCT NAMES */
 const products = [
     {
         id: 1,
         name: "Sneakers",
         price: 50,
-        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80"
+        image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 2,
         name: "Watch",
         price: 80,
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80"
-        
+        image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 3,
         name: "Backpack",
         price: 40,
-        image: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80"
+        image: "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&w=500&q=80"
     },
     {
         id: 4,
         name: "Headphones",
         price: 60,
-        image: "https://images.unsplash.com/photo-1518441902117-fd7e2d62d6d0?auto=format&fit=crop&w=400&q=80"
+        image: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=500&q=80"
     }
 ];
 
@@ -299,7 +299,6 @@ function placeOrder() {
     }
 
     alert("🎉 Order placed successfully!");
-
     cart = [];
     localStorage.removeItem("cart");
     closeCheckout();
