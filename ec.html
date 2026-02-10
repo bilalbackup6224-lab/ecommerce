@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Fancy Shop – Checkout</title>
+<title>Fancy Shop</title>
 
 <style>
 * {
@@ -53,6 +53,8 @@ main {
 
 .product img {
     width: 100%;
+    height: 180px;
+    object-fit: cover;
     border-radius: 10px;
 }
 
@@ -83,8 +85,8 @@ main {
 
 .cart-item button {
     background: red;
-    border: none;
     color: white;
+    border: none;
     padding: 2px 6px;
     border-radius: 4px;
     cursor: pointer;
@@ -119,10 +121,6 @@ main {
     max-width: 400px;
 }
 
-.modal-content h2 {
-    margin-top: 0;
-}
-
 .modal-content input, select {
     width: 100%;
     padding: 10px;
@@ -141,8 +139,8 @@ main {
 
 .close {
     text-align: right;
-    cursor: pointer;
     color: red;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -175,14 +173,15 @@ main {
 
         <input type="text" id="name" placeholder="Full Name">
         <input type="text" id="address" placeholder="Shipping Address">
+
         <select id="payment">
-            <option value="">Payment Method</option>
+            <option value="">Select Payment Method</option>
             <option>Credit Card</option>
             <option>UPI</option>
             <option>Cash on Delivery</option>
         </select>
 
-        <p><strong>Order Total: $<span id="checkoutTotal">0</span></strong></p>
+        <p><strong>Total: $<span id="checkoutTotal">0</span></strong></p>
 
         <button class="place-order" onclick="placeOrder()">Place Order</button>
     </div>
@@ -190,10 +189,30 @@ main {
 
 <script>
 const products = [
-    { id: 1, name: "Sneakers", price: 50, image: "https://picsum.photos/300?1" },
-    { id: 2, name: "Watch", price: 80, image: "https://picsum.photos/300?2" },
-    { id: 3, name: "Backpack", price: 40, image: "https://picsum.photos/300?3" },
-    { id: 4, name: "Headphones", price: 60, image: "https://picsum.photos/300?4" }
+    {
+        id: 1,
+        name: "Sneakers",
+        price: 50,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        id: 2,
+        name: "Watch",
+        price: 80,
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        id: 3,
+        name: "Backpack",
+        price: 40,
+        image: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        id: 4,
+        name: "Headphones",
+        price: 60,
+        image: "https://images.unsplash.com/photo-1518441902117-fd7e2d62d6d0?auto=format&fit=crop&w=400&q=80"
+    }
 ];
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -258,7 +277,7 @@ function saveCart() {
 
 function openCheckout() {
     if (cart.length === 0) {
-        alert("Cart is empty!");
+        alert("Your cart is empty!");
         return;
     }
     document.getElementById("checkoutModal").style.display = "flex";
@@ -292,3 +311,4 @@ renderCart();
 
 </body>
 </html>
+
